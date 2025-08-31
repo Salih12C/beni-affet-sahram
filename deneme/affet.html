@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Affet Beni</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      text-align: center;
+      font-family: 'Georgia', serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom, #fff0f5, #ffe4e1);
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin: 40px 20px 10px;
+      color: #b30059;
+    }
+
+    #buttons {
+      position: relative;
+      height: 200px;
+      width: 100%;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: absolute;
+    }
+
+    #yesBtn {
+      background-color: #ff69b4;
+      color: white;
+      left: 40%;
+      top: 30%;
+    }
+
+    #noBtn {
+      background-color: #d32f2f;
+      color: white;
+      left: 55%;
+      top: 30%;
+    }
+
+    #pointMessage {
+      margin-top: 180px;
+      font-size: 1rem;
+      color: #444;
+      font-style: italic;
+      transition: opacity 0.4s ease;
+    }
+
+    #imageContainer {
+      margin-top: 30px;
+      display: none;
+    }
+
+    #imageContainer img {
+      max-width: 90vw;
+      height: auto;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+
+    #yesBtn.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      font-size: 48px;
+      z-index: 1000;
+    }
+
+    #yesBtn.fullscreen + #noBtn {
+      display: none;
+    }
+
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: pink;
+      transform: rotate(45deg);
+      animation: float 10s linear infinite;
+      opacity: 0.6;
+      z-index: 0;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: pink;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) rotate(45deg);
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(-10vh) rotate(45deg);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.4rem;
+        margin-top: 40px;
+      }
+      button {
+        font-size: 16px;
+        padding: 12px 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Beni affeder misin Sahramm</h1>
+
+  <div id="buttons">
+    <button id="yesBtn">Evet</button>
+    <button id="noBtn">Hayır</button>
+  </div>
+
+  <p id="pointMessage"></p>
+
+  <div id="imageContainer">
+    <img src="surpriz.jpeg" alt="Sürpriz" width="300" height="250">
+  </div>
+
+  <script>
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+    const pointMessage = document.getElementById('pointMessage');
+    const imageContainer = document.getElementById('imageContainer');
+
+    const messages = [
+      "Lütfen...",
+      "Affetmeyecek misin?",
+      "Ama seni çok seviyorum...",
+      "Kıracak mısın bu çocuğu?",
+      "Son kez soruyorum 😔"
+    ];
+
+    let noClickCount = 0;
+    let yesBtnScale = 1;
+    let noBtnScale = 1;
+
+    noBtn.addEventListener('click', () => {
+      if (noClickCount < messages.length) {
+        pointMessage.innerText = messages[noClickCount];
+      }
+      noClickCount++;
+      yesBtnScale += 0.3;
+      yesBtn.style.transform = `scale(${yesBtnScale})`;
+
+      // Hayır butonunu küçült ve konumunu değiştir
+      noBtnScale -= 0.1;
+      noBtn.style.transform = `scale(${noBtnScale})`;
+      const randomTop = Math.random() * 60;
+      const randomLeft = Math.random() * 80;
+      noBtn.style.top = `${randomTop}%`;
+      noBtn.style.left = `${randomLeft}%`;
+
+      if (noClickCount === 5) {
+        yesBtn.classList.add('fullscreen');
+        pointMessage.innerText = "Artık dayanamayacağım 😢";
+      }
+    });
+
+    yesBtn.addEventListener('click', () => {
+      pointMessage.innerText = "İyi ki affettin ❤️";
+      document.getElementById('buttons').style.display = "none";
+      imageContainer.style.display = "block";
+    });
+
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (5 + Math.random() * 5) + 's';
+      document.body.appendChild(heart);
+      setTimeout(() => {
+        heart.remove();
+      }, 10000);
+    }
+
+    setInterval(createHeart, 300);
+  </script>
+
+</body>
+</html>
